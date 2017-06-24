@@ -3,49 +3,26 @@ import {
   AppRegistry,
   StyleSheet,
   View,
+  Platform,
 } from 'react-native';
 
-//import Icon from 'react-native-vector-icons/Ionicons'
+import {Scene, Router} from 'react-native-router-flux';
 
-import ArtistList from './artistList'
-import { getArtists } from './apis-client'
+import HomeView from './HomeView'
+import artistDetailView from './artistDetailView'
 
-export default class PlatziMusic extends Component {
-  state = {
-    artists: []
-  }
-
-  componentDidMount() {
-    getArtists()
-      .then(data => this.setState({ artists: data }))
-  }
-
+class PlatziMusic extends React.Component {
   render() {
-    const artists = this.state.artists
-    //console.warn('artists', artists)
-    /*const artist = {
-      image: 'https://lastfm-img2.akamaized.net/i/u/300x300/31a51f6e3ec647c8997150ec837891c7.png',
-      name: 'David Bowie',
-      likes: 200,
-      comments: 140
-    }
-    const artists = Array(4).fill(artist)*/
+    // Puedo usar esta variable para ocultar la navegacion del boton hacia atras.
+    const isAndroid = Platform.OS === 'android'
 
-    return (
-      
-      <View style={styles.container}>
-        <ArtistList artists={artists} /> 
-      </View>
-    );
+    return <Router>
+      <Scene key="root">
+        <Scene key="home" component={HomeView} hideNavBar/>
+        <Scene key="artistDetail" component={artistDetailView} hideNavBar={false} title="Artista"/>
+      </Scene>
+    </Router>
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'lightgray',
-    paddingTop: 50,
-  }
-});
 
 AppRegistry.registerComponent('PlatziMusic', () => PlatziMusic);
